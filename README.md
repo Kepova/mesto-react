@@ -24,4 +24,4 @@
 
 **Ссылка на проект**
 
-Проект доступен на GitHub Pages [по этой ссылке](https://kepova.github.io/mesto/).
+Проект доступен на GitHub Pages [по этой ссылке](https://kepova.github.io/mesto-react/).
