@@ -12,8 +12,8 @@ function App() {
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   let [selectedCard, setSelectedCard] = useState(null);
 
-  const handleCardClick = (data) => {
-    setSelectedCard(data);
+  const handleCardClick = (cardData) => {
+    setSelectedCard(cardData);
   }
 
   const handleEditAvatarClick = () => {
@@ -38,9 +38,15 @@ function App() {
   return (
     <div className="page">
       <Header />
-      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} />
+      <Main onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick} />
       <Footer />
-      <PopupWithForm title={'Редактировать профиль'} name={'edit'} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm title={'Редактировать профиль'}
+                      name={'edit'}
+                      isOpen={isEditProfilePopupOpen}
+                      onClose={closeAllPopups}>
         <fieldset className="popup__info">
           <div className="popup__input-container">
             <input type="text" name="name" id="popup__input-name" className="popup__input popup__input_info_name"
@@ -60,7 +66,10 @@ function App() {
         </fieldset>
       </PopupWithForm>
 
-      <PopupWithForm title={'Обновить аватар'} name={'avatar'} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm title={'Обновить аватар'}
+                     name={'avatar'}
+                     isOpen={isEditAvatarPopupOpen}
+                     onClose={closeAllPopups}>
         <fieldset className="popup__info">
           <div className="popup__input-container">
             <input type="url" name="avatar" id="popup__input-avatar-src" className="popup__input"
@@ -72,7 +81,10 @@ function App() {
         </fieldset>
       </PopupWithForm>
 
-      <PopupWithForm title={'Новое место'} name={'add'} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
+      <PopupWithForm title={'Новое место'}
+                     name={'add'}
+                     isOpen={isAddPlacePopupOpen}
+                     onClose={closeAllPopups}>
         <fieldset className="popup__info">
           <div className="popup__input-container">
             <input type="text" name="title" id="popup__input-title" className="popup__input popup__input_info_title"
@@ -90,7 +102,8 @@ function App() {
           </div>
         </fieldset>
       </PopupWithForm>
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+      <ImagePopup card={selectedCard}
+                  onClose={closeAllPopups} />
 
       <div className="popup popup_for_delete-card">
         <div className="popup__container">

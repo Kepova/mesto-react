@@ -18,7 +18,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
             .catch(err => {
                 console.log(err);
             });
-    });
+    }, []);
 
     useEffect(() => {
         api.getInitialCards()
@@ -36,9 +36,11 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
             .catch(err => {
                 console.log(err);
             });
+    }, []);
 
-
-    });
+    const cardsElements = cards.map((card) => (
+        <Card card={card} onCardClick={onCardClick} key={card.id} />
+    ));
 
     return (
         <main className="content">
@@ -54,11 +56,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
                 <button type="button" className="profile__add-button" onClick={onAddPlace}></button>
             </section>
             <section className="elements">
-                {
-                    cards.map((card) => (
-                        <Card card={card} onCardClick={onCardClick} key={card.id} />
-                    ))
-                }
+                {cardsElements}
             </section>
         </main>
     );
