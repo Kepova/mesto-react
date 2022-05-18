@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/api';
 import Card from './Card';
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-    let [userName, setUserName] = useState('');
-    let [userDescription, setUserDescription] = useState('');
-    let [userAvatar, setUserAvatar] = useState('');
+    const {name, about, avatar} = useContext(CurrentUserContext);
+    // let [userName, setUserName] = useState('');
+    // let [userDescription, setUserDescription] = useState('');
+    // let [userAvatar, setUserAvatar] = useState('');
     let [cards, setCards] = useState([]);
 
-    useEffect(() => {
-        api.getUser()
-            .then((userData) => {
-                setUserName(userData.name);
-                setUserDescription(userData.about);
-                setUserAvatar(userData.avatar);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     api.getUser()
+    //         .then((userData) => {
+    //             setUserName(userData.name);
+    //             setUserDescription(userData.about);
+    //             setUserAvatar(userData.avatar);
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //         });
+    // }, []);
 
     useEffect(() => {
         api.getInitialCards()
@@ -46,12 +48,12 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
         <main className="content">
             <section className="profile">
                 <a href="#" className="profile__avatar-container" onClick={onEditAvatar}>
-                    <img src={userAvatar} alt="Аватарка" className="profile__avatar" />
+                    <img src={avatar} alt="Аватарка" className="profile__avatar" />
                 </a>
                 <div className="profile__info">
-                    <h1 className="profile__title">{userName}</h1>
+                    <h1 className="profile__title">{name}</h1>
                     <button type="button" className="profile__edit-button" onClick={onEditProfile}></button>
-                    <p className="profile__subtitle">{userDescription}</p>
+                    <p className="profile__subtitle">{about}</p>
                 </div>
                 <button type="button" className="profile__add-button" onClick={onAddPlace}></button>
             </section>
