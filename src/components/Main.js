@@ -3,57 +3,16 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/api';
 import Card from './Card';
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete }) {
     const { name, about, avatar, _id } = useContext(CurrentUserContext);
-    let [cards, setCards] = useState([]);
-
-    useEffect(() => {
-        api.getInitialCards()
-            .then((res) => {
-                const cardsData = res.map((card) => {
-                    return {
-                        name: card.name,
-                        link: card.link,
-                        likes: card.likes,
-                        _id: card._id,
-                        owner: {
-                            _id: card.owner._id
-                        }
-                    };
-                })
-                setCards(cardsData);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, []);
 
     const cardsElements = cards.map((card) => (
         <Card card={card}
             onCardClick={onCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
             key={card._id} />
     ));
-
-    //Лайк карточки
-    function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === _id);
-
-        api.changeLikeCardStatus(card._id, !isLiked)
-            .then((newCard) => {
-                setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-            });
-    };
-
-    // Удаление карточки
-    function handleCardDelete(card) {
-
-        api.deleteCard(card._id)
-            .then(() => {
-                setCards((state) => state.filter((c) => c._id !== card._id));
-            })
-    }
 
     return (
         <main className="content">
