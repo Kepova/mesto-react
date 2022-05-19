@@ -4,23 +4,8 @@ import { api } from '../utils/api';
 import Card from './Card';
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-    const {name, about, avatar} = useContext(CurrentUserContext);
-    // let [userName, setUserName] = useState('');
-    // let [userDescription, setUserDescription] = useState('');
-    // let [userAvatar, setUserAvatar] = useState('');
+    const { name, about, avatar, _id } = useContext(CurrentUserContext);
     let [cards, setCards] = useState([]);
-
-    // useEffect(() => {
-    //     api.getUser()
-    //         .then((userData) => {
-    //             setUserName(userData.name);
-    //             setUserDescription(userData.about);
-    //             setUserAvatar(userData.avatar);
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    // }, []);
 
     useEffect(() => {
         api.getInitialCards()
@@ -30,7 +15,10 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
                         name: card.name,
                         link: card.link,
                         likes: card.likes,
-                        id: card._id
+                        _id: card._id,
+                        owner: {
+                            _id: card.owner._id
+                        }
                     };
                 })
                 setCards(cardsData);
@@ -41,8 +29,31 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
     }, []);
 
     const cardsElements = cards.map((card) => (
-        <Card card={card} onCardClick={onCardClick} key={card.id} />
+        <Card card={card}
+            onCardClick={onCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            key={card._id} />
     ));
+
+    //Лайк карточки
+    function handleCardLike(card) {
+        const isLiked = card.likes.some(i => i._id === _id);
+
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            });
+    };
+
+    // Удаление карточки
+    function handleCardDelete(card) {
+
+        api.deleteCard(card._id)
+            .then(() => {
+                setCards((state) => state.filter((c) => c._id !== card._id));
+            })
+    }
 
     return (
         <main className="content">
