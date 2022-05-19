@@ -8,7 +8,6 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     }
 
     const handleLikeClick = () => {
-        console.log(card)
         onCardLike(card);
     }
 
