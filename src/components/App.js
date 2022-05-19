@@ -4,6 +4,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
 import { api } from '../utils/api';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
@@ -14,6 +15,17 @@ function App() {
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   let [selectedCard, setSelectedCard] = useState(null);
   let [currentUser, setCurrentUser] = useState('');
+
+  const handleUpdateUser = (dataEditUser) => {
+    api.editProfile(dataEditUser.name, dataEditUser.about)
+    .then((userData) => {
+      setCurrentUser(userData);
+      closeAllPopups();
+    })
+    .catch(err => {
+      console.log(err)
+    });
+  };
 
   useEffect(() => {
     api.getUser()
@@ -57,28 +69,8 @@ function App() {
         onEditAvatar={handleEditAvatarClick}
         onCardClick={handleCardClick} />
       <Footer />
-      <PopupWithForm title={'Редактировать профиль'}
-        name={'edit'}
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}>
-        <fieldset className="popup__info">
-          <div className="popup__input-container">
-            <input type="text" name="name" id="popup__input-name" className="popup__input popup__input_info_name"
-              placeholder="Имя" required minLength="2" maxLength="40" />
-            <div className="popup__error-container">
-              <span className="popup__input-name-error popup__error"></span>
-            </div>
-          </div>
-          <div className="popup__input-container">
-            <input type="text" name="profession" id="popup__input-profession"
-              className="popup__input popup__input_info_profession" placeholder="Профессия" required minLength="2"
-              maxLength="200" />
-            <div className="popup__error-container">
-              <span className="popup__input-profession-error popup__error"></span>
-            </div>
-          </div>
-        </fieldset>
-      </PopupWithForm>
+
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/> 
 
       <PopupWithForm title={'Обновить аватар'}
         name={'avatar'}
