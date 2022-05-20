@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -16,13 +15,16 @@ function App() {
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   let [selectedCard, setSelectedCard] = useState(null);
-  let [currentUser, setCurrentUser] = useState('');
+  let [currentUser, setCurrentUser] = useState({});
   let [cards, setCards] = useState([]);
 
-  // Получение начальных карточек
+  // Получение начальных данных
   useEffect(() => {
-    api.getInitialCards()
-      .then((res) => {
+    Promise.all([api.getUser(), api.getInitialCards()])
+      .then(([userData, res]) => {
+        // установка данных пользователя
+        setCurrentUser(userData);
+        //начальные карточки
         const cardsData = res.map((card) => {
           return {
             name: card.name,
@@ -41,23 +43,15 @@ function App() {
       });
   }, []);
 
-  // Получение начальных данных профиля
-  useEffect(() => {
-    api.getUser()
-      .then((userData) => {
-        setCurrentUser(userData);
-      })
-      .catch(err => {
-        console.log(err)
-      });
-  }, []);
-
   //Лайк карточки
   const handleCardLike = (card) => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -66,6 +60,9 @@ function App() {
     api.deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 

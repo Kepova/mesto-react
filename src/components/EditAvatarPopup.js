@@ -1,22 +1,22 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
-    const [avatar, setAvatar] = useState();
+    const [avatar, setAvatar] = useState('');
     const avatarRef = useRef();
-
-    function changeAvatarProfile() {
-        setAvatar(avatarRef.current.value);
-    };
 
     function handleSubmit(e) {
         e.preventDefault();
 
         onUpdateAvatar({
-            avatar
+            avatar: avatarRef.current.value
         });
     };
+
+    useEffect(() => {
+        avatarRef.current.value = '';
+    }, [isOpen]);
 
     return (
         <PopupWithForm title={'Обновить аватар'}
@@ -27,7 +27,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
             <fieldset className="popup__info">
                 <div className="popup__input-container">
                     <input type="url" name="avatar" id="popup__input-avatar-src" className="popup__input"
-                        placeholder="Ссылка на новый аватар" required ref={avatarRef} value={avatar || ''} onChange={changeAvatarProfile} />
+                        placeholder="Ссылка на новый аватар" required ref={avatarRef} />
                     <div className="popup__error-container">
                         <span className="popup__input-avatar-src-error popup__error"></span>
                     </div>
