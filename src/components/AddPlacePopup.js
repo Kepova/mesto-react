@@ -29,6 +29,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     return (
         <PopupWithForm title={'Новое место'}
             name={'add'}
+            nameButton={'Сохранить'}
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}>

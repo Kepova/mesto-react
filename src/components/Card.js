@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Card({ card, onCardClick, onCardLike, onCardDelete }) {
+function Card({ card, onCardClick, onCardLike, onCardDeletePopup }) {
     const currentUser = useContext(CurrentUserContext);
+
     const handleClick = () => {
         onCardClick(card);
     }
@@ -11,8 +12,8 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
         onCardLike(card);
     }
 
-    const handleDeleteClick = () => {
-        onCardDelete(card);
+    const handleDeleteClickCard = () => {
+        onCardDeletePopup(card);
     }
 
     // Отображение кнопки удаления карточки
@@ -33,7 +34,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
                 <button type="button" className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
                 <span className="element__like-count">{card.likes.length}</span>
             </div>
-            <button type="button" className={cardDeleteButtonClassName} onClick={handleDeleteClick}></button>
+            <button type="button" className={cardDeleteButtonClassName} onClick={handleDeleteClickCard}></button>
         </div>);
 }
 

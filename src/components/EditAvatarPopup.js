@@ -1,9 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
-    const [avatar, setAvatar] = useState('');
     const avatarRef = useRef();
 
     function handleSubmit(e) {
@@ -21,6 +20,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     return (
         <PopupWithForm title={'Обновить аватар'}
             name={'avatar'}
+            nameButton={'Сохранить'}
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}>

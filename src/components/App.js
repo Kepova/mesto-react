@@ -8,12 +8,14 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import DeletePopup from './DeletePopup';
 
 function App() {
 
   let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  let [isDeleteCardPopup, setIsDeleteCardPopup] = useState(null);
   let [selectedCard, setSelectedCard] = useState(null);
   let [currentUser, setCurrentUser] = useState({});
   let [cards, setCards] = useState([]);
@@ -56,10 +58,15 @@ function App() {
   };
 
   // Удаление карточки
+  const handleCardDeleteClick = (card) => {
+    setIsDeleteCardPopup(card);
+  }
+
   const handleCardDelete = (card) => {
     api.deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
+        closeAllPopups();
       })
       .catch(err => {
         console.log(err);
@@ -123,6 +130,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setIsDeleteCardPopup(null);
   }
 
   return (
@@ -135,7 +143,7 @@ function App() {
           onCardClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete} />
+          onCardDeletePopup={handleCardDeleteClick} />
         <Footer />
 
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
@@ -145,15 +153,9 @@ function App() {
         <ImagePopup card={selectedCard}
           onClose={closeAllPopups} />
 
-        <div className="popup popup_for_delete-card">
-          <div className="popup__container">
-            <form className="popup__form popup__form-delete-card" name="delete-card-form" noValidate>
-              <h2 className="popup__title">Вы уверены?</h2>
-              <button type="submit" className="popup__save-button add">Да</button>
-            </form>
-            <button type="button" className="popup__close-button"></button>
-          </div>
-        </div>
+        <DeletePopup card={isDeleteCardPopup} onClose={closeAllPopups} onCardDelete={handleCardDelete}></DeletePopup>
+
+
 
       </div >
     </ CurrentUserContext.Provider>
